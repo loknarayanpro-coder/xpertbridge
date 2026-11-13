@@ -196,14 +196,22 @@ export const LoginPage: React.FC = () => {
           <div className="lg:col-span-6 p-8 sm:p-12 flex flex-col justify-between bg-white">
             <div className="space-y-6">
               
-              {/* Form Header */}
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                  Sign In
-                </h2>
-                <p className="text-sm text-slate-500 mt-1 font-normal">
-                  Choose your role to continue
-                </p>
+              {/* Form Header with Sign Up Link */}
+              <div className="flex items-center justify-between pb-1">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                    Sign In
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-500 mt-0.5 font-normal">
+                    Choose your role to continue
+                  </p>
+                </div>
+                <Link
+                  to="/signup"
+                  className="text-xs font-bold text-blue-600 hover:text-blue-800 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-200 transition shrink-0"
+                >
+                  Create Account →
+                </Link>
               </div>
 
               {/* Role Toggle Switch: [Student | Admin] */}

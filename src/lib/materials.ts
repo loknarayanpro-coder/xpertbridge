@@ -81,25 +81,55 @@ export const materialsService = {
 
   // Get public download/view URL for an educational material
   getPublicUrl(storagePath: string): string {
-    if (!isSupabaseConfigured) return '';
+    if (!storagePath) return '';
+    if (storagePath.startsWith('http://') || storagePath.startsWith('https://')) {
+      return storagePath;
+    }
+    const cleanPath = storagePath.replace(/^uploads\//, 'notes/');
     const { data: { publicUrl } } = supabase.storage
       .from('academic-resources')
-      .getPublicUrl(storagePath);
-    return publicUrl;
+      .getPublicUrl(cleanPath);
+    return publicUrl || '';
   },
 
   // Download real binary PDF blob directly from Supabase Storage
   async downloadFile(storagePath: string): Promise<Blob | null> {
-    if (!isSupabaseConfigured || !storagePath) return null;
-    const { data, error } = await supabase.storage
-      .from('academic-resources')
-      .download(storagePath);
-
-    if (error || !data) {
-      console.warn('Supabase storage download warning:', error);
-      return null;
+    if (!storagePath) return null;
+    let cleanPath = storagePath;
+    if (cleanPath.startsWith('uploads/')) {
+      cleanPath = cleanPath.replace(/^uploads\//, 'notes/');
     }
-    return data;
+
+    try {
+      const { data, error } = await supabase.storage
+        .from('academic-resources')
+        .download(cleanPath);
+
+      if (!error && data) {
+        return data;
+      }
+      if (error) {
+        console.warn('Supabase storage download warning:', error);
+      }
+    } catch (e) {
+      console.warn('Storage download threw error:', e);
+    }
+
+    // Secondary fallback: fetch directly via HTTP from public URL
+    try {
+      const publicUrl = this.getPublicUrl(cleanPath);
+      if (publicUrl) {
+        const res = await fetch(publicUrl);
+        if (res.ok) {
+          const blob = await res.blob();
+          if (blob && blob.size > 0) return blob;
+        }
+      }
+    } catch (fetchErr) {
+      console.warn('Direct fetch fallback warning:', fetchErr);
+    }
+
+    return null;
   },
 
   // Increment download counter

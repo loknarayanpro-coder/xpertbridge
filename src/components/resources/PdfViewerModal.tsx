@@ -42,6 +42,8 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({ resource, onClos
   if (!resource) return null;
 
   const bookmarked = isBookmarked(resource.id);
+  const pdfUrl = resource ? materialsService.getPublicUrl(resource.storage_path) : '';
+  const hasRealPdf = Boolean(pdfUrl && !resource.storage_path?.startsWith('demo/'));
 
   const handleDownload = async () => {
     if (resource) {
@@ -171,10 +173,10 @@ export const PdfViewerModal: React.FC<PdfViewerModalProps> = ({ resource, onClos
         </div>
 
         {/* Document Content Canvas */}
-        {resource.storage_path && resource.storage_path.trim() !== '' && !resource.storage_path.startsWith('demo/') ? (
+        {hasRealPdf ? (
           <div className="flex-1 bg-slate-900 w-full flex flex-col min-h-[650px]">
             <iframe
-              src={`${materialsService.getPublicUrl(resource.storage_path)}#view=FitH`}
+              src={`${pdfUrl}#view=FitH`}
               title={resource.title}
               className="w-full flex-1 min-h-[650px] border-0 bg-white"
             />

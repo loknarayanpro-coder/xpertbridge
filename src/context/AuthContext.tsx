@@ -234,7 +234,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             semester: details.semester,
             created_at: new Date().toISOString(),
           };
-          await supabase.from('profiles').insert([newProfile]);
+          await supabase.from('profiles').upsert([newProfile]);
           setUser(newProfile);
           setLoading(false);
           return { success: true };
