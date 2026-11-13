@@ -31,16 +31,27 @@ function setLocalItem<T>(key: string, value: T): void {
   }
 }
 
-// Mock seed uploader names to exclude so only genuine user-uploaded files are shown
-const MOCK_SEED_UPLOADERS = new Set([
-  'Department of CSE',
-  'Academic Cell',
-  'Examination Cell',
-  'AI Research Lab',
-  'Cybersecurity Cell',
-  'Department of ECE',
-  'Prof. Raman',
-]);
+// Clean out any legacy mock cache so only genuine uploaded files are kept
+try {
+  localStorage.removeItem(STORAGE_KEYS.RESOURCES);
+  localStorage.removeItem(STORAGE_KEYS.SUBMISSIONS);
+  localStorage.removeItem(STORAGE_KEYS.REQUESTS);
+} catch {
+  // ignore
+}
+
+// Function to strictly identify genuine user-uploaded files
+function isUserUploaded(r: Resource): boolean {
+  if (!r) return false;
+  if (r.uploader_name === 'loknarayanpro' || r.uploaded_by === 'a2f68cc4-a819-4a1a-8f57-c429f0ce5b87') {
+    return true;
+  }
+  // Any real storage upload with a valid timestamped path
+  if (r.storage_path && !r.storage_path.startsWith('demo/') && !r.storage_path.startsWith('qp/cse/cs3351') && r.storage_path.includes('_')) {
+    return true;
+  }
+  return false;
+}
 
 export const dataService = {
   // Check backend status
@@ -186,10 +197,10 @@ export const dataService = {
       if (error) {
         console.error('Supabase getResources query error:', error);
       } else if (data) {
-        resources = (data as Resource[]).filter(r => !MOCK_SEED_UPLOADERS.has(r.uploader_name));
+        resources = (data as Resource[]).filter(isUserUploaded);
       }
     } else {
-      resources = getLocalItem<Resource[]>(STORAGE_KEYS.RESOURCES, INITIAL_RESOURCES).filter(r => !MOCK_SEED_UPLOADERS.has(r.uploader_name));
+      resources = getLocalItem<Resource[]>(STORAGE_KEYS.RESOURCES, INITIAL_RESOURCES).filter(isUserUploaded);
     }
 
     // Filter in-memory for rich interactions
@@ -266,9 +277,9 @@ export const dataService = {
   async getAllResourcesAdmin(): Promise<Resource[]> {
     if (isSupabaseConfigured) {
       const { data, error } = await supabase.from('resources').select('*').order('created_at', { ascending: false });
-      if (!error && data) return (data as Resource[]).filter(r => !MOCK_SEED_UPLOADERS.has(r.uploader_name));
+      if (!error && data) return (data as Resource[]).filter(isUserUploaded);
     }
-    return getLocalItem<Resource[]>(STORAGE_KEYS.RESOURCES, INITIAL_RESOURCES).filter(r => !MOCK_SEED_UPLOADERS.has(r.uploader_name));
+    return getLocalItem<Resource[]>(STORAGE_KEYS.RESOURCES, INITIAL_RESOURCES).filter(isUserUploaded);
   },
 
   async getResourceById(id: string): Promise<Resource | undefined> {
