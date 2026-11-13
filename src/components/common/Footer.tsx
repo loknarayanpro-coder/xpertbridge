@@ -136,8 +136,11 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom copyright line matching reference */}
-        <div className="pt-8 text-xs text-slate-500">
-          <p>© 2026 XpertBridge. All rights reserved.</p>
+        <div className="pt-8 flex flex-col items-center justify-center text-center space-y-1.5">
+          <p className="text-xs text-slate-500">© 2026 XpertBridge. All rights reserved.</p>
+          <p className="text-[11.5px] text-slate-400 opacity-65 font-sans font-normal tracking-normal select-none">
+            © 2026 Lok. All Rights Reserved. | Designed &amp; Developed by Lok.
+          </p>
         </div>
       </div>
     </footer>
