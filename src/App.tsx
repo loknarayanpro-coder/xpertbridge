@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { BookmarkProvider } from './context/BookmarkContext';
-import { DemoBanner } from './components/common/DemoBanner';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { Toast } from './components/common/Toast';
@@ -33,9 +32,6 @@ function AppLayout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-800 font-sans selection:bg-blue-600 selection:text-white">
-      {/* Top Transparent Status & Persona Switcher */}
-      <DemoBanner />
-
       {/* Shared Sticky Header & Navigation (Hidden on Auth Pages) */}
       {!isAuthPage && <Navbar />}
 
