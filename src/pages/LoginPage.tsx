@@ -220,31 +220,6 @@ export const LoginPage: React.FC = () => {
                 </p>
               </div>
 
-              {/* Interception Notice Banner */}
-              {msgParam === 'auth_required' && (
-                <div className="p-3.5 bg-amber-50/90 border border-amber-200 rounded-xl text-xs text-amber-800 flex items-start gap-2.5 animate-in fade-in">
-                  <Lock className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-bold">Sign-in Required to Access Academic Content</p>
-                    <p className="mt-0.5 text-amber-700 text-[11px] leading-relaxed">
-                      Please sign in with your student credentials or click Google / Persona below to unlock the study library.
-                    </p>
-                  </div>
-                </div>
-              )}
-
-              {msgParam === 'admin_required' && (
-                <div className="p-3.5 bg-purple-50/90 border border-purple-200 rounded-xl text-xs text-purple-800 flex items-start gap-2.5 animate-in fade-in">
-                  <ShieldCheck className="w-4 h-4 text-purple-600 shrink-0 mt-0.5" />
-                  <div>
-                    <p className="font-bold">Administrator Privileges Required</p>
-                    <p className="mt-0.5 text-purple-700 text-[11px]">
-                      Please sign in as an Academic Administrator to access administrative and moderation tools.
-                    </p>
-                  </div>
-                </div>
-              )}
-
               {/* Role Toggle Switch: [Student | Admin] */}
               <div className="bg-slate-100/90 p-1 rounded-xl border border-slate-200/80 grid grid-cols-2 gap-1">
                 <button
@@ -409,29 +384,6 @@ export const LoginPage: React.FC = () => {
                 </svg>
                 <span>Continue with Google</span>
               </button>
-
-              {/* 1-Click Fast Persona Helper for Easy Demo Testing */}
-              <div className="pt-2 flex items-center justify-center gap-3 text-[11px] text-slate-500">
-                <span className="flex items-center gap-1 text-slate-400">
-                  <Sparkles className="w-3 h-3 text-amber-500" />
-                  Quick test:
-                </span>
-                <button
-                  type="button"
-                  onClick={() => handleRoleSelect('student')}
-                  className={`font-semibold hover:underline ${selectedRole === 'student' ? 'text-blue-600 font-bold' : 'text-slate-600'}`}
-                >
-                  Student demo
-                </button>
-                <span>•</span>
-                <button
-                  type="button"
-                  onClick={() => handleRoleSelect('admin')}
-                  className={`font-semibold hover:underline ${selectedRole === 'admin' ? 'text-blue-600 font-bold' : 'text-slate-600'}`}
-                >
-                  Admin demo
-                </button>
-              </div>
 
             </div>
 
