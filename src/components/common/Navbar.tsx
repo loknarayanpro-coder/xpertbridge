@@ -91,45 +91,6 @@ export const Navbar: React.FC = () => {
             {/* Conditional Authentication View */}
             {isAuthenticated ? (
               <>
-                {/* Quick 1-Click Role Switcher (Student vs Admin) */}
-                <div className="hidden lg:flex items-center bg-slate-100 p-0.5 rounded-full border border-slate-200 text-[11px] font-medium">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (isAdmin) {
-                        navigate('/student');
-                      }
-                    }}
-                    className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition ${
-                      !isAdmin 
-                        ? 'bg-blue-600 text-white font-semibold shadow-xs' 
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                    title="Active as Student"
-                  >
-                    <User className="w-3 h-3" />
-                    <span>Student</span>
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (!isAdmin) {
-                        navigate('/admin');
-                      }
-                    }}
-                    className={`flex items-center gap-1 px-2.5 py-1 rounded-full transition ${
-                      isAdmin 
-                        ? 'bg-purple-600 text-white font-semibold shadow-xs' 
-                        : 'text-slate-600 hover:text-slate-900'
-                    }`}
-                    title="Active as Academic Administrator"
-                  >
-                    <ShieldCheck className="w-3 h-3" />
-                    <span>Admin</span>
-                  </button>
-                </div>
-
                 {/* Dedicated Role Link Button */}
                 {isAdmin ? (
                   <Link
@@ -138,7 +99,6 @@ export const Navbar: React.FC = () => {
                   >
                     <ShieldCheck className="w-3.5 h-3.5 text-purple-600" />
                     <span>Admin Console</span>
-                    <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" title="Submissions awaiting review" />
                   </Link>
                 ) : (
                   <Link

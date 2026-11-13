@@ -105,13 +105,10 @@ export const AdminPage: React.FC = () => {
           </p>
           <div className="pt-2">
             <button
-              onClick={() => {
-                switchDemoRole('admin');
-                loadAdminData();
-              }}
+              onClick={() => navigate('/login')}
               className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg shadow-sm transition"
             >
-              Switch to Demo Admin Persona (Prof. Vikram Raman)
+              Sign In as Administrator
             </button>
           </div>
         </div>
@@ -198,7 +195,7 @@ export const AdminPage: React.FC = () => {
           </div>
         )}
 
-        {/* Header with Switch to Student button */}
+        {/* Header with Direct Admin Upload button */}
         <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-start sm:items-center gap-4">
             <div className="w-14 h-14 rounded-2xl bg-purple-600 text-white flex items-center justify-center font-bold text-xl shadow-md shrink-0">
@@ -210,7 +207,7 @@ export const AdminPage: React.FC = () => {
                   Administrative Console
                 </h1>
                 <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-xs font-semibold rounded-md">
-                  Prof. Vikram Raman
+                  {user?.display_name || user?.email?.split('@')[0] || 'Administrator'}
                 </span>
                 <span className="px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-semibold rounded-md border border-blue-200">
                   CSE Active Focus
@@ -223,17 +220,6 @@ export const AdminPage: React.FC = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <button
-              onClick={() => {
-                navigate('/student');
-              }}
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 text-xs font-semibold rounded-lg transition"
-              title="Preview the student experience"
-            >
-              <User className="w-4 h-4 text-blue-600" />
-              <span>Switch to Student View</span>
-            </button>
-
             <button
               onClick={() => setIsUploadOpen(true)}
               className="inline-flex items-center gap-2 px-4 py-2.5 bg-purple-600 hover:bg-purple-700 text-white text-xs font-semibold rounded-lg shadow-sm transition"
@@ -268,9 +254,9 @@ export const AdminPage: React.FC = () => {
           </div>
 
           <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-            <span className="text-xs font-medium text-slate-500 block">Branches Waitlist (Students)</span>
+            <span className="text-xs font-medium text-slate-500 block">Total Resource Downloads</span>
             <span className="text-2xl font-extrabold text-purple-600 mt-1 block">
-              {totalWaitlistedStudents}
+              {totalDownloads}
             </span>
           </div>
         </div>

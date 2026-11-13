@@ -103,7 +103,7 @@ export const StudentPortalPage: React.FC = () => {
               <div className="space-y-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h1 className="text-2xl font-bold text-[#102C4B]">
-                    {user?.display_name || 'Aravind Sharma'}
+                    {user?.display_name || user?.email?.split('@')[0] || 'Student'}
                   </h1>
                   <span className="px-2.5 py-0.5 text-xs font-semibold rounded-md bg-blue-100 text-blue-700">
                     Student Workspace
@@ -118,7 +118,7 @@ export const StudentPortalPage: React.FC = () => {
                 <div className="flex flex-wrap items-center gap-3 text-xs text-slate-600 pt-1">
                   <span className="flex items-center gap-1">
                     <Building2 className="w-3.5 h-3.5 text-slate-400" />
-                    {user?.college || 'Suryodaya Institute of Engineering & Technology'}
+                    {user?.college || 'College Campus'}
                   </span>
                   <span>•</span>
                   <span className="font-semibold text-blue-700">Computer Science & Engineering</span>
@@ -128,7 +128,7 @@ export const StudentPortalPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Actions for Student & Admin Switch */}
+            {/* Actions for Student */}
             <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
               <button
                 onClick={() => setIsRequestOpen(true)}
@@ -144,17 +144,6 @@ export const StudentPortalPage: React.FC = () => {
               >
                 <UploadCloud className="w-4 h-4" />
                 <span>Upload Material</span>
-              </button>
-
-              <button
-                onClick={() => {
-                  navigate('/admin');
-                }}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2.5 bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-semibold rounded-lg transition"
-                title="Switch perspective to Academic Admin"
-              >
-                <ShieldCheck className="w-4 h-4 text-purple-600" />
-                <span>Switch to Admin Console</span>
               </button>
             </div>
 

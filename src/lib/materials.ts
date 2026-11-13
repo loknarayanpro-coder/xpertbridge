@@ -1,6 +1,18 @@
 import { supabase, isSupabaseConfigured } from './supabase';
 import { Resource, ResourceFilters } from '../types';
 
+// Helper to identify real user uploaded files
+function isUserUploaded(r: Resource): boolean {
+  if (!r) return false;
+  if (r.uploader_name === 'loknarayanpro' || r.uploaded_by === 'a2f68cc4-a819-4a1a-8f57-c429f0ce5b87') {
+    return true;
+  }
+  if (r.storage_path && /\b\d{13}_/.test(r.storage_path)) {
+    return true;
+  }
+  return false;
+}
+
 export const materialsService = {
   // Fetch materials with optional filtering
   async getMaterials(filters?: Partial<ResourceFilters>): Promise<Resource[]> {
@@ -32,7 +44,7 @@ export const materialsService = {
       return [];
     }
 
-    return (data || []) as Resource[];
+    return ((data || []) as Resource[]).filter(isUserUploaded);
   },
 
   // Get material by ID

@@ -36,6 +36,7 @@ try {
   localStorage.removeItem(STORAGE_KEYS.RESOURCES);
   localStorage.removeItem(STORAGE_KEYS.SUBMISSIONS);
   localStorage.removeItem(STORAGE_KEYS.REQUESTS);
+  localStorage.removeItem(STORAGE_KEYS.WAITLISTS);
 } catch {
   // ignore
 }
@@ -47,7 +48,7 @@ function isUserUploaded(r: Resource): boolean {
     return true;
   }
   // Any real storage upload with a valid timestamped path
-  if (r.storage_path && !r.storage_path.startsWith('demo/') && !r.storage_path.startsWith('qp/cse/cs3351') && r.storage_path.includes('_')) {
+  if (r.storage_path && /\b\d{13}_/.test(r.storage_path)) {
     return true;
   }
   return false;
@@ -129,7 +130,11 @@ export const dataService = {
       if (departmentId) query = query.eq('department_id', departmentId);
       if (semester) query = query.eq('semester', semester);
       const { data, error } = await query.order('name');
-      if (!error && data) subjects = data as Subject[];
+      if (!error && data && data.length > 0) {
+        subjects = data as Subject[];
+      } else {
+        subjects = INITIAL_SUBJECTS;
+      }
     } else {
       subjects = getLocalItem<Subject[]>(STORAGE_KEYS.SUBJECTS, INITIAL_SUBJECTS);
     }
@@ -558,19 +563,19 @@ export const dataService = {
   // DEPARTMENT WAITLISTS (For non-CSE branches "Available Soon")
   getDepartmentWaitlistCounts(): Record<string, number> {
     const defaultCounts: Record<string, number> = {
-      'ECE': 48,
-      'EEE': 34,
-      'MECH': 29,
-      'CIVIL': 19,
-      'AIDS': 52,
+      'ECE': 0,
+      'EEE': 0,
+      'MECH': 0,
+      'CIVIL': 0,
+      'AIDS': 0,
     };
     const stored = getLocalItem<Record<string, number>>(STORAGE_KEYS.WAITLISTS, defaultCounts);
     return stored;
   },
 
-  joinDepartmentWaitlist(deptCode: string, email: string): { count: number } {
+  joinDepartmentWaitlist(deptCode: string, _email?: string): { count: number } {
     const counts = this.getDepartmentWaitlistCounts();
-    const current = counts[deptCode] || 15;
+    const current = counts[deptCode] || 0;
     counts[deptCode] = current + 1;
     setLocalItem(STORAGE_KEYS.WAITLISTS, counts);
     return { count: counts[deptCode] };
