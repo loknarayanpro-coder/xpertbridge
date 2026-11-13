@@ -10,7 +10,6 @@ import {
   FileCheck, 
   AlertCircle, 
   CheckCircle2, 
-  Sparkles,
   ShieldCheck 
 } from 'lucide-react';
 
@@ -52,7 +51,6 @@ export const UploadResourceModal: React.FC<UploadResourceModalProps> = ({
 
   // File
   const [file, setFile] = useState<File | null>(null);
-  const [uploadProgress, setUploadProgress] = useState(0);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [successMsg, setSuccessMsg] = useState<string | null>(null);

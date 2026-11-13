@@ -7,9 +7,7 @@ import {
   Users, 
   HelpCircle, 
   CheckCircle2, 
-  ArrowRight,
-  Sparkles,
-  FileText
+  ArrowRight
 } from 'lucide-react';
 
 export const AboutPage: React.FC = () => {

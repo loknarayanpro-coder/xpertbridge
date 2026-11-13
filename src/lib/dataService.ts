@@ -1,4 +1,4 @@
-import { Department, Subject, Resource, ResourceFilters, Bookmark, Submission, PublicationStatus, ResourceRequest } from '../types';
+import { Department, Subject, Resource, ResourceFilters, Bookmark, Submission, ResourceRequest } from '../types';
 import { INITIAL_DEPARTMENTS, INITIAL_SUBJECTS, INITIAL_RESOURCES, INITIAL_SUBMISSIONS, INITIAL_RESOURCE_REQUESTS } from './mockData';
 import { supabase, isSupabaseConfigured } from './supabase';
 

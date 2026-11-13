@@ -28,10 +28,9 @@ import {
 } from 'lucide-react';
 
 export const StudentPortalPage: React.FC = () => {
-  const { user, isAuthenticated, isAdmin, updateProfile, switchDemoRole } = useAuth();
+  const { user, updateProfile } = useAuth();
   const { bookmarks } = useBookmarks();
   const [searchParams, setSearchParams] = useSearchParams();
-  const navigate = useNavigate();
 
   const activeTab = searchParams.get('tab') || 'courses';
   const [submissions, setSubmissions] = useState<Submission[]>([]);

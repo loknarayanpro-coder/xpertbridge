@@ -90,104 +90,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const cleanEmail = email.trim().toLowerCase();
 
-      // 1. Admin login (loknarayanpro@gmail.com)
-      if (cleanEmail === 'loknarayanpro@gmail.com' || cleanEmail.includes('admin')) {
-        if (isSupabaseConfigured && password) {
-          try {
-            const { data } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
-            if (data?.user) {
-              const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).maybeSingle();
-              const adminUser: UserProfile = profile || {
-                id: data.user.id,
-                email: cleanEmail,
-                display_name: 'loknarayanpro',
-                role: 'admin',
-                college: 'College Campus',
-                department_code: 'CSE',
-                created_at: new Date().toISOString(),
-              };
-              setUser(adminUser);
-              setLoading(false);
-              return { success: true };
-            }
-          } catch (e) {
-            console.warn('Supabase admin auth attempt:', e);
-          }
-        }
-
-        // Direct guaranteed Admin session
-        const adminProfile: UserProfile = {
-          id: 'a2f68cc4-a819-4a1a-8f57-c429f0ce5b87',
-          email: 'loknarayanpro@gmail.com',
-          display_name: 'loknarayanpro',
-          role: 'admin',
-          college: 'College Campus',
-          department_code: 'CSE',
-          created_at: new Date().toISOString(),
-        };
-        setUser(adminProfile);
+      if (!cleanEmail) {
         setLoading(false);
-        return { success: true };
+        return { success: false, error: 'Email address is required' };
       }
 
-      // 2. Student login with Supabase
-      if (isSupabaseConfigured && password) {
-        try {
-          const { data, error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password });
-          if (!error && data?.user) {
-            const { data: profile } = await supabase.from('profiles').select('*').eq('id', data.user.id).maybeSingle();
-            const studentUser: UserProfile = profile || {
-              id: data.user.id,
-              email: cleanEmail,
-              display_name: cleanEmail.split('@')[0],
-              role: 'student',
-              college: 'College Campus',
-              department_code: 'CSE',
-              created_at: new Date().toISOString(),
-            };
-            setUser(studentUser);
-            setLoading(false);
-            return { success: true };
-          }
-        } catch (e) {
-          console.warn('Supabase student auth attempt:', e);
-        }
+      if (!password) {
+        setLoading(false);
+        return { success: false, error: 'Password is required' };
       }
 
-      // 3. Match database profile by email if password mismatch
       if (isSupabaseConfigured) {
-        try {
-          const { data: matchedProfile } = await supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: cleanEmail,
+          password,
+        });
+
+        if (error) {
+          setLoading(false);
+          return { success: false, error: error.message };
+        }
+
+        if (data?.user) {
+          const { data: profile } = await supabase
             .from('profiles')
             .select('*')
-            .ilike('email', cleanEmail)
+            .eq('id', data.user.id)
             .maybeSingle();
 
-          if (matchedProfile) {
-            setUser(matchedProfile as UserProfile);
-            setLoading(false);
-            return { success: true };
-          }
-        } catch (e) {
-          console.warn('Profile lookup attempt:', e);
+          const isAdminUser = profile?.role === 'admin' || cleanEmail === 'loknarayanpro@gmail.com';
+          const authenticatedUser: UserProfile = profile || {
+            id: data.user.id,
+            email: cleanEmail,
+            display_name: cleanEmail.split('@')[0],
+            role: isAdminUser ? 'admin' : 'student',
+            college: 'College Campus',
+            department_code: 'CSE',
+            created_at: new Date().toISOString(),
+          };
+
+          setUser(authenticatedUser);
+          setLoading(false);
+          return { success: true };
         }
       }
 
-      // 4. Guaranteed student session for any valid email
-      const studentProfile: UserProfile = {
-        id: `usr-${Date.now().toString(36)}`,
-        email: cleanEmail,
-        display_name: cleanEmail.split('@')[0].replace('.', ' '),
-        role: 'student',
-        college: 'College Campus',
-        department_code: 'CSE',
-        academic_year: 3,
-        semester: 5,
-        created_at: new Date().toISOString(),
-      };
-      setUser(studentProfile);
       setLoading(false);
-      return { success: true };
+      return { success: false, error: 'Unable to connect to authentication service.' };
     } catch (err: unknown) {
       setLoading(false);
       return { success: false, error: err instanceof Error ? err.message : 'Login failed' };
@@ -207,12 +156,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       if (isSupabaseConfigured && details.password) {
         const { data, error } = await supabase.auth.signUp({
-          email: details.email,
+          email: details.email.trim().toLowerCase(),
           password: details.password,
           options: {
             data: {
-              display_name: details.display_name,
-              college: details.college,
+              display_name: details.display_name.trim(),
+              college: details.college.trim(),
+              department_code: details.department_code || 'CSE',
+              semester: details.semester || 1,
             }
           }
         });
@@ -225,13 +176,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         if (data.user) {
           const newProfile: UserProfile = {
             id: data.user.id,
-            email: details.email,
-            display_name: details.display_name,
+            email: details.email.trim().toLowerCase(),
+            display_name: details.display_name.trim(),
             role: 'student',
-            college: details.college,
-            department_code: details.department_code,
-            academic_year: details.academic_year,
-            semester: details.semester,
+            college: details.college.trim() || 'College Campus',
+            department_code: details.department_code || 'CSE',
+            academic_year: details.academic_year || 1,
+            semester: details.semester || 1,
             created_at: new Date().toISOString(),
           };
           await supabase.from('profiles').upsert([newProfile]);
@@ -241,21 +192,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       }
 
-      // Demo signup
-      const newUser: UserProfile = {
-        id: `usr-${Date.now()}`,
-        email: details.email,
-        display_name: details.display_name,
-        role: 'student',
-        college: details.college || 'Suryodaya Institute of Engineering & Technology',
-        department_code: details.department_code || 'CSE',
-        academic_year: details.academic_year || 1,
-        semester: details.semester || 1,
-        created_at: new Date().toISOString(),
-      };
-      setUser(newUser);
       setLoading(false);
-      return { success: true };
+      return { success: false, error: 'Registration service unavailable. Please try again.' };
     } catch (err: unknown) {
       setLoading(false);
       return { success: false, error: err instanceof Error ? err.message : 'Registration failed' };
@@ -269,12 +207,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
   };
 
-  const switchDemoRole = (role: Role): void => {
-    if (role === 'admin') {
-      setUser(DEMO_USERS.admin);
-    } else {
-      setUser(DEMO_USERS.student);
-    }
+  const switchDemoRole = (_role: Role): void => {
+    // Disabled in production
   };
 
   const updateProfile = async (updates: Partial<UserProfile>): Promise<void> => {

@@ -1,26 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
 import { 
   GraduationCap, 
   ShieldCheck, 
   BookOpen, 
   FileText, 
   CheckCircle2, 
-  ArrowRight, 
-  Sparkles, 
-  Layers, 
-  HelpCircle, 
-  Users, 
+  ArrowRight,
+  Sparkles,
   Zap,
-  Download,
   Lock,
   UserPlus,
   LogIn
 } from 'lucide-react';
 
 export const LandingAuthFeaturesSection: React.FC = () => {
-  const { switchDemoRole } = useAuth();
 
   return (
     <div className="space-y-16 py-12">

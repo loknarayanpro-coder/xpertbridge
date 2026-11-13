@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /student
+Disallow: /profile
+
+Sitemap: https://xpertbridge.vercel.app/sitemap.xml

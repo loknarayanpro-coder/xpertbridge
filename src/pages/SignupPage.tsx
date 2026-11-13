@@ -185,7 +185,7 @@ export const SignupPage: React.FC = () => {
                   <input
                     type="text"
                     required
-                    placeholder={accountType === 'faculty' ? 'e.g. Dr. Ramesh Sundaram' : 'e.g. Aravind Sharma'}
+                    placeholder={accountType === 'faculty' ? 'e.g. Professor / Faculty Name' : 'e.g. Student Full Name'}
                     value={displayName}
                     onChange={(e) => setDisplayName(e.target.value)}
                     className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-800"

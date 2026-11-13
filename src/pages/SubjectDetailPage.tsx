@@ -6,7 +6,6 @@ import { ResourceCard } from '../components/resources/ResourceCard';
 import { PdfViewerModal } from '../components/resources/PdfViewerModal';
 import { UploadResourceModal } from '../components/resources/UploadResourceModal';
 import { 
-  BookOpen, 
   FileText, 
   GraduationCap, 
   Layers, 

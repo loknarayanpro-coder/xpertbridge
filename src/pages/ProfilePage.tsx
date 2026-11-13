@@ -17,13 +17,12 @@ import {
   ShieldCheck, 
   Clock, 
   CheckCircle2, 
-  XCircle,
-  FileText
+  XCircle
 } from 'lucide-react';
 
 export const ProfilePage: React.FC = () => {
   const { user, isAuthenticated, isAdmin, updateProfile } = useAuth();
-  const { bookmarks, refreshBookmarks } = useBookmarks();
+  const { bookmarks } = useBookmarks();
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
 

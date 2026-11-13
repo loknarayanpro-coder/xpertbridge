@@ -8,7 +8,6 @@ import { PdfViewerModal } from '../components/resources/PdfViewerModal';
 import { UploadResourceModal } from '../components/resources/UploadResourceModal';
 import { dataService } from '../lib/dataService';
 import { Department, Resource } from '../types';
-import { UploadCloud, CheckCircle2, ShieldCheck, BookOpen } from 'lucide-react';
 
 export const HomePage: React.FC = () => {
   const [departments, setDepartments] = useState<Department[]>([]);
@@ -16,7 +15,6 @@ export const HomePage: React.FC = () => {
   const [recentlyAdded, setRecentlyAdded] = useState<Resource[]>([]);
   const [previewResource, setPreviewResource] = useState<Resource | null>(null);
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
 
   const loadHomeData = async () => {
     try {
@@ -30,8 +28,6 @@ export const HomePage: React.FC = () => {
       setRecentlyAdded(recent);
     } catch (err) {
       console.error('Error loading homepage data:', err);
-    } finally {
-      setLoading(false);
     }
   };
 

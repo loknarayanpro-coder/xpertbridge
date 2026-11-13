@@ -6,7 +6,6 @@ import {
   User, 
   ShieldCheck, 
   AlertCircle, 
-  CheckCircle2, 
   BookOpen, 
   Bookmark, 
   Users, 
@@ -14,8 +13,7 @@ import {
   Mail, 
   Eye, 
   EyeOff, 
-  ArrowLeft,
-  Sparkles
+  ArrowLeft
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
@@ -33,7 +31,13 @@ export const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(
+    msgParam === 'admin_required' 
+      ? 'Administrator privileges are required to access that console.' 
+      : msgParam === 'auth_required' 
+        ? 'Please sign in to continue.' 
+        : null
+  );
 
   useEffect(() => {
     if (roleParam === 'admin') {

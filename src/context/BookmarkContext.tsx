@@ -51,7 +51,7 @@ export const BookmarkProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const toggleBookmark = async (resource: Resource): Promise<boolean> => {
     if (!user) {
-      setToastMessage('Please login or switch demo user to save resources');
+      setToastMessage('Please sign in to save and bookmark resources');
       return false;
     }
 

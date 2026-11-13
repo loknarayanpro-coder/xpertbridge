@@ -7,8 +7,6 @@ import { PdfViewerModal } from '../components/resources/PdfViewerModal';
 import { UploadResourceModal } from '../components/resources/UploadResourceModal';
 import { 
   ShieldCheck, 
-  Layers, 
-  BookOpen, 
   FileText, 
   CheckCircle2, 
   XCircle, 
@@ -17,21 +15,17 @@ import {
   Plus, 
   Building2, 
   Eye, 
-  Download,
-  AlertTriangle,
   Lock,
-  User,
-  HelpCircle,
-  Sparkles,
   ToggleLeft,
   ToggleRight,
   Bell,
-  ArrowRight,
-  Send
+  Send,
+  BookOpen,
+  HelpCircle
 } from 'lucide-react';
 
 export const AdminPage: React.FC = () => {
-  const { user, isAdmin, switchDemoRole } = useAuth();
+  const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
   
   const [activeTab, setActiveTab] = useState<'submissions' | 'resources' | 'departments' | 'subjects' | 'requests'>('submissions');
@@ -116,9 +110,19 @@ export const AdminPage: React.FC = () => {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-50/60 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-3">
+          <div className="w-8 h-8 border-3 border-purple-600 border-t-transparent rounded-full animate-spin" />
+          <span className="text-xs text-slate-500 font-medium">Loading administrative records...</span>
+        </div>
+      </div>
+    );
+  }
+
   const pendingSubmissions = submissions.filter(s => s.moderation_status === 'pending');
   const totalDownloads = resources.reduce((acc, r) => acc + (r.download_count || 0), 0);
-  const totalWaitlistedStudents = Object.values(waitlistCounts).reduce((a, b) => a + b, 0);
 
   const handleReviewSubmission = async (id: string, status: 'approved' | 'rejected') => {
     const notes = status === 'approved' ? 'Verified syllabus alignment for CSE' : 'Document quality does not meet academic standards';
