@@ -28,27 +28,21 @@ export const LoginPage: React.FC = () => {
   const roleParam = searchParams.get('role');
 
   const [selectedRole, setSelectedRole] = useState<'student' | 'admin'>(roleParam === 'admin' ? 'admin' : 'student');
-  const [email, setEmail] = useState(roleParam === 'admin' ? 'loknarayanpro@gmail.com' : 'student@xpertbridge.edu');
-  const [password, setPassword] = useState('password123');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(true);
+  const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   useEffect(() => {
     if (roleParam === 'admin') {
       setSelectedRole('admin');
-      setEmail('loknarayanpro@gmail.com');
     }
   }, [roleParam]);
 
   const handleRoleSelect = (role: 'student' | 'admin') => {
     setSelectedRole(role);
-    if (role === 'student') {
-      setEmail('student@xpertbridge.edu');
-    } else {
-      setEmail('loknarayanpro@gmail.com');
-    }
     setErrorMsg(null);
   };
 

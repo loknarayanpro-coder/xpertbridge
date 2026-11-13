@@ -23,7 +23,7 @@ export const SignupPage: React.FC = () => {
   const [displayName, setDisplayName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [college, setCollege] = useState('Suryodaya Institute of Engineering & Technology');
+  const [college, setCollege] = useState('');
   const [departmentCode, setDepartmentCode] = useState('CSE');
   const [academicYear, setAcademicYear] = useState('3');
   const [semester, setSemester] = useState('5');
