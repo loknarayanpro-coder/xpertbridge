@@ -309,7 +309,7 @@ export const LoginPage: React.FC = () => {
                     href="#forgot" 
                     onClick={(e) => {
                       e.preventDefault();
-                      alert(`Demo Mode: Password reset is pre-configured. Use email: ${email} with any demo password.`);
+                      alert('Password recovery: Please contact your college administrator or reset your password via email.');
                     }}
                     className="font-semibold text-blue-600 hover:text-blue-700 hover:underline transition"
                   >
@@ -333,6 +333,14 @@ export const LoginPage: React.FC = () => {
                   )}
                 </button>
               </form>
+
+              {/* Sign up link */}
+              <div className="pt-2 text-center text-xs text-slate-500">
+                Don't have an account?{' '}
+                <Link to="/signup" className="font-semibold text-blue-600 hover:text-blue-700 hover:underline">
+                  Create an account
+                </Link>
+              </div>
 
             </div>
 
