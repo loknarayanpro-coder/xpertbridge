@@ -75,13 +75,16 @@ export const UploadResourceModal: React.FC<UploadResourceModalProps> = ({
       if (departmentId) {
         const subs = await dataService.getSubjects(departmentId);
         setSubjects(subs);
-        if (subs.length > 0 && !subjectId) {
-          setSubjectId(subs[0].id);
+        const match = subs.find(s => s.semester.toString() === semester) || subs[0];
+        if (match) {
+          setSubjectId(match.id);
+        } else {
+          setSubjectId('');
         }
       }
     }
     loadSubjects();
-  }, [departmentId]);
+  }, [departmentId, semester]);
 
   if (!isOpen) return null;
 
@@ -368,18 +371,28 @@ export const UploadResourceModal: React.FC<UploadResourceModalProps> = ({
             </label>
             <select
               value={subjectId}
-              onChange={(e) => setSubjectId(e.target.value)}
+              onChange={(e) => {
+                const sId = e.target.value;
+                setSubjectId(sId);
+                const chosen = subjects.find(s => s.id === sId);
+                if (chosen && chosen.semester) {
+                  setSemester(chosen.semester.toString());
+                }
+              }}
               className="w-full px-3 py-2 text-xs bg-slate-50 border border-slate-200 rounded-lg text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
             >
-              {subjects.length > 0 ? (
-                subjects.map((s) => (
-                  <option key={s.id} value={s.id}>
-                    {s.subject_code} — {s.name}
-                  </option>
-                ))
-              ) : (
-                <option value="">No subjects found for this department</option>
-              )}
+              {(() => {
+                const semSubs = subjects.filter(s => s.semester.toString() === semester);
+                const displayList = semSubs.length > 0 ? semSubs : subjects;
+                if (displayList.length > 0) {
+                  return displayList.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.subject_code} — {s.name} (Sem {s.semester})
+                    </option>
+                  ));
+                }
+                return <option value="">No subjects found for this department</option>;
+              })()}
             </select>
           </div>
 

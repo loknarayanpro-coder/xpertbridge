@@ -37,6 +37,8 @@ try {
   localStorage.removeItem(STORAGE_KEYS.SUBMISSIONS);
   localStorage.removeItem(STORAGE_KEYS.REQUESTS);
   localStorage.removeItem(STORAGE_KEYS.WAITLISTS);
+  localStorage.removeItem(STORAGE_KEYS.DEPARTMENTS);
+  localStorage.removeItem(STORAGE_KEYS.SUBJECTS);
 } catch {
   // ignore
 }
@@ -127,8 +129,18 @@ export const dataService = {
 
     if (isSupabaseConfigured) {
       let query = supabase.from('subjects').select('*');
-      if (departmentId) query = query.eq('department_id', departmentId);
-      if (semester) query = query.eq('semester', semester);
+      if (departmentId && departmentId !== 'all') {
+        const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(departmentId);
+        if (isUUID) {
+          query = query.eq('department_id', departmentId);
+        } else {
+          const cleanCode = departmentId.replace(/^dept-/i, '').toUpperCase();
+          query = query.ilike('department_code', cleanCode);
+        }
+      }
+      if (semester && semester !== 0) {
+        query = query.eq('semester', semester);
+      }
       const { data, error } = await query.order('name');
       if (!error && data && data.length > 0) {
         subjects = data as Subject[];
@@ -140,10 +152,15 @@ export const dataService = {
     }
 
     return subjects.filter(s => {
-      if (departmentId && s.department_id !== departmentId && s.department_code.toLowerCase() !== departmentId.toLowerCase()) {
-        return false;
+      if (departmentId && departmentId !== 'all') {
+        const cleanDept = departmentId.replace(/^dept-/i, '').toLowerCase();
+        const matchesId = s.department_id === departmentId;
+        const matchesCode = s.department_code?.toLowerCase() === cleanDept || s.department_code?.toLowerCase() === departmentId.toLowerCase();
+        if (!matchesId && !matchesCode) {
+          return false;
+        }
       }
-      if (semester && s.semester !== semester) {
+      if (semester && semester !== 0 && s.semester !== semester) {
         return false;
       }
       return true;
