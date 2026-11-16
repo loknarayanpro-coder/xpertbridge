@@ -5,3 +5,4 @@ Disallow: /student
 Disallow: /profile
 
 Sitemap: https://xpertbridge.vercel.app/sitemap.xml
+

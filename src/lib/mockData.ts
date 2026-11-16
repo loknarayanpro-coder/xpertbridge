@@ -300,9 +300,9 @@ export const DEMO_USERS: Record<'student' | 'admin', UserProfile> = {
     created_at: new Date().toISOString(),
   },
   admin: {
-    id: 'a2f68cc4-a819-4a1a-8f57-c429f0ce5b87',
-    email: 'loknarayanpro@gmail.com',
-    display_name: 'loknarayanpro',
+    id: '2610569f-aec5-413f-a3d2-88dc28f0b737',
+    email: 'teamxpertbridge@gmail.com',
+    display_name: 'Team XpertBridge',
     role: 'admin',
     college: 'College Campus',
     department_code: 'CSE',

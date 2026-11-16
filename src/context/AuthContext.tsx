@@ -118,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             .eq('id', data.user.id)
             .maybeSingle();
 
-          const isAdminUser = profile?.role === 'admin' || cleanEmail === 'loknarayanpro@gmail.com';
+          const isAdminUser = profile?.role === 'admin' || cleanEmail === 'loknarayanpro@gmail.com' || cleanEmail === 'teamxpertbridge@gmail.com';
           const authenticatedUser: UserProfile = profile || {
             id: data.user.id,
             email: cleanEmail,

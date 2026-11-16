@@ -46,7 +46,13 @@ try {
 // Function to strictly identify genuine user-uploaded files
 function isUserUploaded(r: Resource): boolean {
   if (!r) return false;
-  if (r.uploader_name === 'loknarayanpro' || r.uploaded_by === 'a2f68cc4-a819-4a1a-8f57-c429f0ce5b87') {
+  if (
+    r.uploader_name === 'loknarayanpro' || 
+    r.uploader_name === 'teamxpertbridge' || 
+    r.uploader_name === 'Team XpertBridge' ||
+    r.uploaded_by === 'a2f68cc4-a819-4a1a-8f57-c429f0ce5b87' ||
+    r.uploaded_by === '2610569f-aec5-413f-a3d2-88dc28f0b737'
+  ) {
     return true;
   }
   // Any real storage upload with a valid timestamped path
